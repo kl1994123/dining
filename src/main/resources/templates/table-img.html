@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.2</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8"/>
+    <link rel="stylesheet" th:href="@{../static/css/font.css}">
+    <link rel="stylesheet" th:href="@{../static/css/xadmin.css}">
+    <script th:src="@{../static/js/jquery.min.js}"></script>
+    <script th:src="@{../static/js/constance.js}"></script>
+    <script th:src="@{../static/layui/layui.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{../static/js/xadmin.js}"></script>
+    </head>
+
+    <body>
+        <div class="layui-fluid">
+            <div class="layui-row">
+                <img class="img"  />
+            </div>
+        </div>
+        <script>
+            layui.use(['form', 'layer'],
+            function() {
+                $ = layui.jquery;
+                var form = layui.form,
+                layer = layui.layer;
+
+            });
+
+            (function(){
+                var  id=getQueryString("tableId")
+                $.ajax({
+                    url:baseUrl.url+'table/getImg?id='+id,
+                    type:'GET',
+                    success:function(ret){
+                        $(".img").attr("src","data:image/jpge;base64,"+ret)
+                    }
+                })
+            })();
+
+            function getQueryString(name) {
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+                var r = window.location.search.substr(1).match(reg);
+                if (r !== null)
+                    return unescape(r[2]);
+                return null;
+            }
+        </script>
+    </body>
+
+</html>

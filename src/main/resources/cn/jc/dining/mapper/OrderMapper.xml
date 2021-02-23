@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.jc.dining.mapper.OrderMapper">
+
+    <select id="getAllOrder" resultType="cn.jc.dining.domain.Order">
+        select id,openid,orderId, orderTime,state,status,total from st_order
+        where
+        <if test="start !='' and end != ''">
+            orderTime between #{start} and #{end} and
+        </if>
+        is_delete = '0'
+        order by orderTime desc
+    </select>
+
+    <resultMap id="detailMap" type="cn.jc.dining.domain.OrderDetail">
+        <id column="id" property="id" />
+        <result column="foodCount" property="foodCount"/>
+        <result column="orderId" property="orderId" />
+        <result column="status" property="status"/>
+        <result column="foodId" property="foodId"/>
+        <association property="foodId" column="d_id" javaType="cn.jc.dining.domain.FoodDetail">
+            <result column="name" property="name" />
+        </association>
+
+
+    </resultMap>
+
+    <select id="getAllOrderByTime" resultType="cn.jc.dining.domain.Order">
+        select id,openid,orderId, orderTime,state,status,total from st_order
+        where orderTime  between #{start} and #{end} and is_delete = '0'
+        order by orderTime desc
+        limit #{page},#{rows}
+    </select>
+
+    <select id="getOrderById" resultType="cn.jc.dining.domain.Order">
+        select id,openid,orderId,orderTime,state,status,total from st_order
+        where openid = #{openid} and is_delete = '0'
+        order by orderTime
+    </select>
+
+    <select id="getOrderDetail" resultType="Map">
+        select m.id,m.foodId,m.foodCount,m.orderId,m.status,d.name from st_order_mx m
+        left join st_food_detail d on m.foodId=d.d_id
+        where orderId = #{ordernum}
+    </select>
+
+    <select id="getAllCount" resultType="String">
+        select count(*) from st_order where is_delete = '0'
+    </select>
+
+    <insert id="insertOrder" parameterType="cn.jc.dining.domain.Order">
+        insert into st_order
+        (openid,orderId,orderTime,state,status,total)
+        values
+        (#{openid},#{orderId},now(),#{state},#{status},#{total})
+    </insert>
+
+    <update id="deleteOrder" parameterType="String">
+        update st_order set is_delete = '1'
+        where orderId = #{ordernum}
+    </update>
+
+    <select id="getAllCountByTime" parameterType="String" resultType="Integer">
+         select count(*) from st_order
+         where orderTime  between #{start} and #{end} and is_delete = '0'
+    </select>
+
+    <select id="getAllOrderDetail" parameterType="String" resultType="Map">
+        select d.name,sum(m.foodCount) count,m.foodId  from st_order o
+        left join st_order_mx m on o.orderId = m.orderId
+        left join st_food_detail d on m.foodId = d.d_id
+        where o.orderTime between date_add('2021-01-20 15:00:00', interval - 5 minute) and now() and m.status !='2'
+        GROUP BY d.name,m.foodId
+    </select>
+
+    <update id="finalFood" parameterType="String" >
+        update st_order_mx
+        set status = '2'
+        where foodId = #{id}
+    </update>
+
+    <select id="getAllStockInfo" parameterType="String" resultType="Map">
+        select stockid ,costnum from st_food_stock
+        where foodid = #{foodid}
+    </select>
+
+    <update id="subStock" parameterType="Map">
+            update st_stock
+            set stocknum = stocknum -
+            #{costnum}
+            where
+            id = #{stockid}
+    </update>
+
+</mapper>

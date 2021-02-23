@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.2</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8"/>
+    <link rel="stylesheet" th:href="@{../static/css/font.css}">
+    <link rel="stylesheet" th:href="@{../static/css/xadmin.css}">
+    <script th:src="@{../static/js/jquery.min.js}"></script>
+    <script th:src="@{../static/js/constance.js}"></script>
+    <script th:src="@{../static/layui/layui.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{../static/js/xadmin.js}"></script>
+
+</head>
+
+<body>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                    <form class="layui-form layui-col-space5">
+                        <div class="layui-input-inline layui-show-xs-block">
+                            <input class="layui-input" placeholder="商品名" name="name" id="name"></div>
+                        <div class="layui-btn"  id="search"><i class="layui-icon">&#xe615;</i></div>
+                    </form>
+                </div>
+                <div class="layui-card-header">
+                    <button class="layui-btn" onclick="xadmin.open('入库','./stock-add',500,500)"><i class="layui-icon"></i>入库</button>
+                </div>
+                <div class="layui-card-body ">
+                    <table class="layui-table layui-form" >
+                        <thead>
+                        <tr>
+                            <th>编号</th>
+                            <th>库存名</th>
+                            <th>库存数量</th>
+                            <th>预警数量</th>
+                            <th>价格</th>
+                            <th>分类</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody class="tablelist" style="margin:0 auto">
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="layui-card-body">
+                    <div id="page"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    (function() {
+        window.total = 0;
+        window.page = 1;
+        window.rows = 10;
+        loaddata();
+        allcount();
+    })();
+
+    function allcount(){
+        $.ajax({
+            url:baseUrl.url+'stock/count',
+            async:true,
+            success:function(ret){
+                layui.use('laypage', function(){
+                    var laypage = layui.laypage;
+                    //执行一个laypage实例
+                    laypage.render({
+                        elem: 'page',//注意，这里的 test1 是 ID，不用加 # 号
+                        count: ret, //数据总数，从服务端得到
+                        jump: function(obj, first){
+                            page=obj.curr;  //改变当前页码
+                            rows=obj.limit;
+                            if(!first){
+                                loaddata()
+                            }
+                        }
+                    });
+                });
+            }
+        })
+    }
+
+    layui.use(['laydate', 'form'],function () {
+            var laydate = layui.laydate;
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#start' //指定元素
+            });
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#end' //指定元素
+            });
+        });
+
+    //分页加载数据
+    function loaddata(){
+        let name = $("#name").val();
+        $.ajax({
+            url:baseUrl.url+'stock/warning',
+            type:'GET',
+            success:function(ret){
+                let warning = ret;
+                $.ajax({
+                    url:baseUrl.url+'stock/getAllManage',
+                    type:'GET',
+                    data:{
+                        page:page,
+                        rows:rows,
+                        name :name
+                    },
+                    success:function(ret){
+                        window.total = ret.msg;
+                        var tablelist = ret.data;
+                        var str = "";
+                        tablelist.forEach(function (item){
+                            let temp = '';
+                            if(warning.indexOf(JSON.stringify(item.id)) != -1){
+                                 temp += '<tr style="color: red">';
+                            }else{
+                                 temp += '<tr>';
+                            }
+                            temp += '<td>'+item.id+'</td><td>'+item.name+'</td><td>'+item.stocknum+'</td>';
+                            temp += '<td>'+item.warningnum+'</td><td>'+item.price+'</td><td>'+item.typename+'</td>';
+                            temp +='<td class="td-manage"><a title="添加库存" onclick="xadmin.open(\'添加库存\',\'./stock-add\',500,500,false,'+item.id+')" href="javascript:;"><i class="layui-icon">&#xe608;</i></a><a title="查看库存明细" onclick="xadmin.open(\'查看库存明细\',\'./stock-detail\',600,400, false,'+item.id+')" href="javascript:;"><i class="layui-icon">&#xe642;</i></a><a title="删除库存" onclick="stock_del(this,'+item.id+')" href="javascript:;"><i class="layui-icon">&#xe640;</i></a></td></tr>';
+                            str += temp;
+                        })
+                        $(".tablelist").html("");
+                        $(".tablelist").append(str);
+                    }
+                })
+            }
+        })
+    }
+
+    $("#search").on('click',function(){
+        let name = $("#name").val();
+        if( name == ''){
+            layer.msg('请输入菜品名!', {
+                icon: 5,
+                time: 1000
+            });
+            return;
+        }
+        $.ajax({
+            url:baseUrl.url+'stock/getAllManage',
+            type:'GET',
+            data:{
+                page:window.page,
+                rows:window.rows,
+                name:name,
+            },
+            success:function(ret){
+                window.total = ret.msg;
+                var tablelist = ret.data;
+                var str = "";
+                tablelist.forEach(function (item){
+                    let temp = '<tr><td>'+item.id+'</td><td>'+item.name+'</td><td>'+item.stocknum+'</td>';
+                    temp += '<td>'+item.warningnum+'</td><td>'+item.price+'</td><td>'+item.typename+'</td>';
+                    temp +='<td class="td-manage"><a title="查看库存明细" onclick="xadmin.open(\'查看库存明细\',\'./stock-detail\',600,400, false,'+item.id+')" href="javascript:;"><i class="layui-icon">&#xe642;</i></a><a title="删除库存" onclick="stock_del(this,'+item.id+')" href="javascript:;"><i class="layui-icon">&#xe640;</i></a></td></tr>';
+                    str += temp;
+                })
+                $(".tablelist").html('')
+                $(".tablelist").append(str);
+                getFood();
+            }
+        })
+    })
+    //删除库存
+    function stock_del(obj, id) {
+        layer.confirm('确认要删除吗？',
+            function () {
+                $.ajax({
+                    url:baseUrl.url+'stock/stock/'+id,
+                    type:'DELETE',
+                    data:{
+                        id:id,
+                    },
+                    success:function(ret){
+                        if (ret.success){
+                            location.reload();
+                        }
+                    }
+                })
+            });
+    }
+
+</script>
+<style>
+    .imgs{
+        width: 50px;
+        height: 50px;
+    }
+</style>
+</html>

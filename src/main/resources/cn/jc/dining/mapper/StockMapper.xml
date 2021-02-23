@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.jc.dining.mapper.StockMapper">
+    <insert id="addNewStock" parameterType="cn.jc.dining.domain.Stock" useGeneratedKeys="true"  keyProperty="id">
+        insert into st_stock
+        (name,stocknum,warningnum,price,typeid)
+        values
+        (#{name},#{stocknum},#{warningnum},#{price},#{typeid});
+    </insert>
+
+    <!--入库时入库明细-->
+    <insert id="addNewStockDetail">
+        insert into st_stock_time
+        (sid,storagetime,number,status)
+        values
+        (#{id},now(),#{stocknum},'1')
+    </insert>
+
+
+    <!--已有商品增加库存-->
+    <update id="addStock" parameterType="cn.jc.dining.domain.Stock" useGeneratedKeys="true"  keyProperty="id">
+        update st_stock set
+        stocknum = stocknum + #{stocknum}
+        where name = #{name}
+    </update>
+
+    <delete id="deleteById" parameterType="Integer">
+        delete from st_stock where id = #{id}
+    </delete>
+
+    <insert id="addStockDetail">
+        insert into st_stock_time
+        (sid,deliverytime,number,status)
+        values
+         (#{id},now(),#{stocknum},'1')
+    </insert>
+
+
+    <select id="getAllStock"  resultType="java.util.Map">
+        select s.id,s.name,s.stocknum,s.warningnum,s.price,n.typename from st_stock s
+        left join st_stock_name n on s.typeid = n.id
+        <if test="name != null and name != '' ">
+            where name like concat("%",concat(#{name},"%"))
+        </if>
+        order by s.id asc
+        limit #{page},#{rows}
+    </select>
+
+    <select id="getStock" resultType="java.util.Map">
+        select id,name from st_stock
+    </select>
+
+    <select id="getAllStockType" resultType="java.util.Map">
+        select * from st_stock_name
+    </select>
+
+    <select id="isExist" parameterType="String" resultType="java.lang.Integer">
+        select id from st_stock
+        where name = #{name}
+    </select>
+
+    <select id="stockById" resultType="java.util.Map">
+        select s.* from st_stock s where s.id = #{id}
+    </select>
+
+    <select id="warning" resultType="String">
+        select id from st_stock
+        where stocknum <![CDATA[ <= ]]> warningnum
+    </select>
+
+    <select id="getAllCount" resultType="String">
+        select count(*) from st_stock
+    </select>
+
+</mapper>

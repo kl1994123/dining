@@ -1,0 +1,76 @@
+<html class="x-admin-sm" lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>后台登录-X-admin2.2</title>
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" th:href="@{../static/css/font.css}">
+    <link rel="stylesheet" th:href="@{../static/css/login.css}">
+    <link rel="stylesheet" th:href="@{../static/css/xadmin.css}">
+    <script th:src="@{../static/js/constance.js}"></script>
+    <script type="text/javascript" th:src="@{https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js}"></script>
+    <script th:src="@{../static/layui/layui.js}" charset="utf-8"></script>
+</head>
+<body class="login-bg">
+    
+    <div class="login layui-anim layui-anim-up">
+        <div class="message">点餐系统管理登录</div>
+        <div id="darkbannerwrap"></div>
+<!--        <form method="post" class="layui-form" >-->
+            <input id="username" name="username" placeholder="用户名"  type="text" lay-verify="required" class="layui-input" >
+            <hr class="hr15">
+            <input id="password" name="password" lay-verify="required" placeholder="密码"  type="password" class="layui-input">
+            <hr class="hr15">
+            <input value="登录" onclick="goto()" lay-submit style="width:100%;" type="button">
+            <hr class="hr20" >
+<!--        </form>-->
+    </div>
+    <script>
+        $(function  () {
+
+        })
+
+        function goto(){
+            let username = $("#username").val();
+            let password = $("#password").val();
+            if(username==''&&password==''){
+                alert("必填项不能为空")
+                return ;
+            }
+            $.ajax({
+                url:baseUrl.url+"user/login",
+                data:{
+                    username:username,
+                    password:password
+                },
+                method:"post",
+                success:function (ret){
+                    if(ret.success){
+                        sessionStorage.setItem("user",JSON.stringify(ret.data));
+                        if(ret.msg=="1"){
+                            location.href = "user/homepage";
+                        }else if(ret.msg=="2"){
+                            location.href = "user/boss/main";
+                        }
+                    }else{
+                        layer.msg(ret.msg, {
+                            icon: 2,
+                            time: 1000
+                        });
+                    }
+                }
+            })
+
+            // if(username == "boss" && password=="123"){
+            //     location.href = "user/boss/main";
+            // }else if(username == "admin" && password=="123"){
+            //     location.href = "user/homepage";
+            // }else{
+            //     alert("用户名或密码错误")
+            // }
+        }
+    </script>
+</body>
+</html>

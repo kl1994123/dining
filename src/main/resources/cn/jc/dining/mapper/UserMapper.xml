@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.jc.dining.mapper.UserMapper">
+    <update id="editUser">
+        update st_user set
+        username = #{username} ,role = #{role}
+        where id =#{id}
+    </update>
+    <delete id="deleteUser">
+        delete  from st_user where id = #{id}
+    </delete>
+
+    <select id="getAllUser" resultType="cn.jc.dining.domain.User">
+        select * from st_user
+        <where>
+            <if test="username != null">
+                username = #{username}
+            </if>
+        </where>
+    </select>
+    <select id="getAllCount" resultType="java.lang.String">
+        select count(*) from  st_user
+    </select>
+
+    <select id="getUserById" resultType="cn.jc.dining.domain.User">
+        select * from st_user where id = #{id}
+    </select>
+    <select id="findByUsername" parameterType="String" resultType="cn.jc.dining.domain.User">
+        select * from st_user where username = #{username}
+    </select>
+
+    <insert id="addUser">
+        insert into st_user
+        (username,password,role)
+        values
+        (#{username},'123456',#{role})
+    </insert>
+
+</mapper>

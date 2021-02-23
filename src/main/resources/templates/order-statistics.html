@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.2</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8"/>
+    <link rel="stylesheet" th:href="@{../static/css/font.css}">
+    <link rel="stylesheet" th:href="@{../static/css/xadmin.css}">
+    <script th:src="@{../static/js/jquery.min.js}"></script>
+    <script th:src="@{../static/js/constance.js}"></script>
+    <script th:src="@{../static/layui/layui.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{../static/js/xadmin.js}"></script>
+
+</head>
+
+<body>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                </div>
+                <div class="layui-card-body ">
+                    <div style="font-size: 30px;margin-left: 20px;font-weight: bold">单份菜</div>
+                    <table class="layui-table layui-form" style="margin-top:30px " >
+                        <thead>
+                        <tr>
+                            <th>菜名</th>
+                            <th>份数</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody class="singlelist" style="margin:0 auto">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                </div>
+                <div class="layui-card-body ">
+                    <div style="font-size: 30px;margin-left: 20px;font-weight: bold">多份菜</div>
+                    <table class="layui-table layui-form" style="margin-top:30px " >
+                        <thead>
+                        <tr>
+                            <th>菜名</th>
+                            <th>份数</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody class="morelist" style="margin:0 auto">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    (function() {
+        loaddata();
+    })();
+
+    function loaddata(){
+        $.ajax({
+            url:baseUrl.url+'order/statictics',
+            type:'GET',
+            success:function(ret){
+                let singlelist = ret.data.single;
+                let morelist = ret.data.more;
+                let single = "";
+                let more = "";
+                singlelist.forEach(function (item){
+                    let temp = '<tr><td>'+item.name+'</td><td>'+item.count+'</td>';
+                    temp +='<td class="td-manage"><button onclick="finalFood('+item.count+','+item.foodId+')"  type="button" class="layui-btn layui-btn-normal layui-btn-radius">已做好</button></td></tr>';
+                    single += temp;
+                })
+                morelist.forEach(function (item){
+                    let temp = '<tr><td>'+item.name+'</td><td>'+item.count+'</td>';
+                    temp +='<td class="td-manage"><button onclick="finalFood('+item.count+','+item.foodId+')" type="button" class="layui-btn layui-btn-normal layui-btn-radius">已做好</button></td></tr>';
+                    more += temp;
+                })
+                $(".singlelist").html("");
+                $(".singlelist").append(single);
+                $(".morelist").html("");
+                $(".morelist").append(more);
+            }
+        })
+    }
+
+    function finalFood(count,foodId){
+        $.ajax({
+            url:baseUrl.url+'order/finalFood',
+            type:'GET',
+            data:{
+                count:count,
+                foodid:foodId
+            },
+            success:function(ret){
+                if (ret.success) {
+                    layer.msg('修改成功', {
+                        icon: 1
+                    });
+                }else {
+                    layer.msg('修改失败', {
+                        icon: 2
+                    });
+                }
+                loaddata();
+            }
+        })
+    }
+
+    layui.use(['laydate', 'form'],
+        function () {
+            var laydate = layui.laydate;
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#start' //指定元素
+            });
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#end' //指定元素
+            });
+        });
+</script>
+<style>
+</style>
+</html>

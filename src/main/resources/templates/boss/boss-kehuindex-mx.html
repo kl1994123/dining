@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.2</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8"/>
+    <link rel="stylesheet" th:href="@{../../static/css/font.css}">
+    <link rel="stylesheet" th:href="@{../../static/css/xadmin.css}">
+    <script th:src="@{../../static/js/jquery.min.js}"></script>
+    <script th:src="@{../../static/js/constance.js}"></script>
+    <script th:src="@{../../static/layui/layui.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{../../static/js/xadmin.js}"></script>
+
+</head>
+
+<body>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                </div>
+                <div class="layui-card-body ">
+                    <table class="layui-table layui-form" >
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>用户名</th>
+                            <th>用户电话</th>
+                            <th>消费次数</th>
+                            <th>累计消费金额</th>
+                            <th>客户积分</th>
+
+                        </tr>
+                        </thead>
+                        <tbody class="tablelist" style="margin:0 auto">
+                        <tr><td>1</td><td>张三</td><td>13881216200</td><td>5</td><td>361</td><td>361</td></tr>
+                        <tr><td>2</td><td>张三</td><td>13881216200</td><td>5</td><td>361</td><td>361</td></tr>
+                        <tr><td>3</td><td>张三</td><td>13881216200</td><td>5</td><td>361</td><td>361</td></tr>
+                        <tr><td>4</td><td>张三</td><td>13881216200</td><td>5</td><td>361</td><td>361</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="layui-card-body">
+                    <div id="page"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    (function() {
+        // layui.form.render('select','myDiv');
+        layui.use('form', function () {
+            var form = layui.form;
+            form.render();
+        });
+
+
+    })();
+
+    function getTableCount(){
+        let count = 0;
+        $.ajax({
+            url:baseUrl.url+'user/getAllCount',
+            type:'GET',
+            async:false,
+            success:function(ret){
+                count = ret.data;
+            }
+        })
+        return count;
+    }
+
+    layui.use('laypage', function(){
+        let c = getTableCount();
+        var laypage = layui.laypage;
+        //执行一个laypage实例
+        laypage.render({
+            elem: 'page',//注意，这里的 test1 是 ID，不用加 # 号
+            count: c, //数据总数，从服务端得到
+            jump: function(obj, first){
+                //首次不执行
+
+            }
+        });
+    });
+
+
+
+
+
+    /*删除*/
+    function user_del(obj, id) {
+        layer.confirm('确认要删除吗？',function (index) {
+            //发异步删除数据
+            $.ajax({
+                url:baseUrl.url+"user/user/"+id,
+                type:'DELETE',
+                success:function (ret){
+                    if(ret.success){
+                        layer.msg('已删除!', {
+                            icon: 1,
+                            time: 1000
+                        });
+                        setTimeout('window.location.reload()',1000);
+                    }
+                }
+            })
+        });
+    }
+
+    function delAll(argument) {
+        var data = tableCheck.getData();
+        layer.confirm('确认要删除吗？' + data,
+            function (index) {
+                //捉到所有被选中的，发异步进行删除
+                layer.msg('删除成功', {
+                    icon: 1
+                });
+                $(".layui-form-checked").not('.header').parents('tr').remove();
+            });
+    }
+</script>
+<style>
+    .imgs{
+        width: 50px;
+        height: 50px;
+    }
+</style>
+</html>

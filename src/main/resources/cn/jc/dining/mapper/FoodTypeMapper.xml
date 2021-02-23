@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.jc.dining.mapper.FoodTypeMapper">
+    <resultMap id="baseresultmap" type="cn.jc.dining.domain.FoodType">
+        <!-- column是数据库中的字段，property是实体类中的字段       -->
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="icon" property="icon" />
+        <collection property="spus" javaType="ArrayList"  ofType="cn.jc.dining.domain.FoodDetail">
+            <id column="d_id" property="id" />
+            <!--
+                当resultmap中两张表有相同的字段，为collection中的字段名的column设置别名，sql中同时设置别名
+            -->
+            <result column="bname" property="name" />
+            <result column="picture" property="picture"/>
+            <result column="description" property="description" />
+            <result column="min_price" property="minPrice" />
+            <result column="type_id" property="typeId" />
+        </collection>
+    </resultMap>
+
+
+<!--使用逗号连接两张表 = inner join
+    与left join的区别是 inner join只会查询关联数据存在的数据
+    不存在的不会查出来 -->
+    <select id="getAllFood" resultMap="baseresultmap">
+        select t.id,t.name,t.icon,d.d_id,d.name bname,d.picture,d.description,d.min_price,d.type_id
+        from st_food_type t ,st_food_detail d where t.id = d.type_id
+    </select>
+
+    <select id="getById" parameterType="String" resultType="cn.jc.dining.domain.FoodDetail">
+        select d.d_id id,d.name,d.picture,d.description,d.min_price minPrice,d.type_id typeId,d.stockdetail
+        from st_food_detail d where d.d_id = #{id}
+    </select>
+
+    <select id="getAllManage" resultType="Map">
+        select d.d_id,d.name,d.picture,d.description,d.min_price,t.name type,d.stockdetail
+        from st_food_detail d
+        left join st_food_type t on d.type_id = t.id
+        <if test="name != null and name != '' ">
+            where d.name like concat("%",concat(#{name},"%"))
+        </if>
+    </select>
+
+    <select id="foodByName" resultType="Map">
+        select d.d_id,d.name,d.picture,d.description,d.min_price,t.name type
+        from st_food_detail d left join st_food_type t on d.type_id = t.id
+        where d.name like concat("%",concat(#{name},"%"))
+    </select>
+
+    <select id="selfFood" parameterType="String" resultType="Map">
+        select sum(m.foodCount)count,d.* from st_order o
+        left join st_order_mx m on o.orderId = m.orderId
+        left join st_food_detail d on m.foodId = d.d_id
+        where o.openid = #{openid}
+        group by d.d_id,d.name
+    </select>
+
+    <delete id="deleteById" parameterType="String">
+        delete from st_food_detail
+        where d_id = #{id}
+    </delete>
+
+    <select id="getFoodType" resultType="Map">
+        select * from st_food_type;
+    </select>
+
+    <resultMap id="stockmap" type="Map">
+        <!-- column是数据库中的字段，property是实体类中的字段       -->
+        <result column="typename" property="typename" />
+        <collection property="stockList" javaType="ArrayList"  ofType="Map">
+            <!--
+                当resultmap中两张表有相同的字段，为collection中的字段名的column设置别名，sql中同时设置别名
+            -->
+            <id column="sid" property="id" />
+            <result column="name" property="name" />
+        </collection>
+    </resultMap>
+
+    <select id="getStock" resultMap="stockmap">
+        select s.id sid ,typename,name from st_stock_name n ,st_stock s where n.id = s.typeid
+    </select>
+
+    <select id="getStockById" resultType="Map" parameterType="String">
+        select id,name from st_stock where id = #{id}
+    </select>
+
+    <update id="insertPic" parameterType="String">
+        update st_food_detail
+        set
+        picture = #{filePath}
+        where d_id = #{id}
+    </update>
+
+    <select id="getFoodStock" parameterType="String" resultType="Map">
+        select  * from st_food_detail where d_id = #{id}
+    </select>
+
+    <select id="getStockIdByName" parameterType="String" resultType="String">
+        select id stockid from st_stock where name = #{stockname}
+    </select>
+
+    <select id="getFoodIdByName" parameterType="String" resultType="String">
+        select d_id foodid from st_food_detail where name =#{foodname}
+    </select>
+
+    <insert id="insertfoodstock" parameterType="String">
+        insert into st_food_stock
+            (stockid,costnum,foodid)
+        values
+        (#{stockid},#{costnum},#{foodid})
+    </insert>
+
+    <select id="loadstock" parameterType="String" resultType="Map">
+        select stockid ,costnum from st_food_stock where foodid = #{foodid}
+    </select>
+
+    <update id="updatefoodstock" parameterType="String" >
+        update st_food_stock
+        set
+        costnum = #{costnum}
+        where foodid = #{foodid} and stockid =#{stockid}
+    </update>
+
+    <select id="FoodStockIsExist" resultType="Integer" parameterType="String" >
+        select count(*) from st_food_stock where foodid = #{foodid}
+    </select>
+
+    <insert id="addFood" parameterType="Map">
+        insert into st_food_detail
+        (name,description,min_price,stockdetail,type_id)
+        value
+        (#{name},#{description},#{minPrice},#{select},#{type})
+    </insert>
+
+    <select id="getAllCount"  resultType="String">
+        select count(*) from st_food_detail
+    </select>
+</mapper>

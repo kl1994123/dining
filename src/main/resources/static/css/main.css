@@ -1,0 +1,94 @@
+body{
+
+    /*background-color: #f0f0f0;*/
+}
+.menu-item:hover{
+    background-color: #4F81BD;
+}
+/*.content >table{*/
+    /*width: 100%;*/
+    /*margin: auto;*/
+/*}*/
+
+.menu-box{
+    width: 100%;
+    margin-top: 0px;
+}
+.menu-row{
+    width: 60%;
+    height: 160px;
+    margin: auto;
+}
+.menu-name{
+    text-align: center;
+    color:#393D49 ;
+    margin: auto;
+}
+.menu-item{
+    background-color: #01AAED;
+    width: 16%;
+    height:120px;
+    margin: 8%;
+    border-radius: 20%;
+    float: left;
+}
+.menu-count{
+    line-height:25px;
+    height:25px;
+    width:25px;
+    border-radius: 50%;
+    text-align:center;
+    margin-left:70%;
+    color: white;
+    background-color: red
+}
+.menu-fill{
+    line-height:25px;
+    height:25px;
+    width:25px;
+    border-radius: 50%;
+    text-align:center;
+    margin-left:70%;
+    color: white;
+}
+.main{
+    width: 100%;
+    height: 100%;
+}
+
+.content{
+    /*border:1px white ridge;*/
+     min-height: 400px;
+     width:100%;
+     margin: auto;
+     /*background-color: white;*/
+    margin-top: 10px;
+    /*color: darkturquoise;*/
+    color: #393D49;
+    /*opacity: 0.9;*/
+     /*border: #92B8B1 1px ridge*/
+ }
+.content-body{
+
+    width:95%;
+    margin: auto;
+    background-color: white;
+    /*border: #92B8B1 1px ridge*/
+}
+
+.item-wlname{
+    height: 30px;
+    text-align: center;
+    color:white ;
+    margin: auto;
+    font-size: 20px
+}
+.item-fill{
+    height: 30px;
+}
+.item-count{height: 40px;text-align: center;color:white ;padding-top: 10px;margin: auto;font-size: 15px}
+.item-name{text-align: center;color:white ;margin: auto;font-size: 15px}
+.item-img{width: 50%;margin: auto; }
+.item-img >img{width: 100%; margin-top: 15px}
+.item-countAndMoney{color: white;text-align: center}
+.item-time{text-align: center;color: white ;margin: auto;font-size: 1px;height: 30px;}

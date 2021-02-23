@@ -1,0 +1,22 @@
+server:
+  port: 4396
+spring:
+  application:
+    name: dining
+  datasource:
+    url: jdbc:mysql://cd-cdb-217paoj2.sql.tencentcdb.com:63263/DCAPP?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: jc86937378
+    type: com.alibaba.druid.pool.DruidDataSource
+  thymeleaf:
+    cache: false
+    encoding: UTF-8
+    prefix: classpath:/templates/
+    mode: .html
+    check-template-location: true
+    servlet:
+      content-type: text/html
+  resources:
+    static-locations: classpath:/static/
+  mvc:
+    static-path-pattern: /static/**

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.2</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8"/>
+    <link rel="stylesheet" th:href="@{../static/css/font.css}">
+    <link rel="stylesheet" th:href="@{../static/css/xadmin.css}">
+    <script th:src="@{../static/js/jquery.min.js}"></script>
+    <script th:src="@{../static/js/constance.js}"></script>
+    <script th:src="@{../static/layui/layui.js}" charset="utf-8"></script>
+    <script th:src="@{../static/js/xm-select.js}"></script>
+    <script type="text/javascript" th:src="@{../static/js/xadmin.js}"></script>
+
+</head>
+<body>
+    <div class="layui-fluid">
+        <div class="layui-row">
+            <form class="layui-form">
+                <div class="layui-form-item">
+                    <label for="name" class="layui-form-label">菜品名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="name" name="name" lay-verify="required"  autocomplete="off" class="layui-input"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="minPrice" class="layui-form-label">价格</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="minPrice" name="minPrice" lay-verify="required"  autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="type" class="layui-form-label">分类</label>
+                    <div class="layui-input-block" style="width: 190px" >
+                        <select name="type" lay-verify="required" id="type" >
+                        </select>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label for="description" class="layui-form-label">描述</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="description" name="description" lay-verify="required"  autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label for="stockdetail" class="layui-form-label">使用原料</label>
+                    <div class="layui-input-inline" >
+                        <div id="stockdetail" name="stockdetail"></div>
+                    </div>
+                </div>
+
+<!--                <div class="layui-form-item">-->
+<!--                    <label for="img" class="layui-form-label">-->
+<!--                        <span class="x-red">*</span>菜品图片</label>-->
+<!--                    <div class="layui-input-inline" id="img">-->
+<!--                        <div class="layui-upload">-->
+<!--                            <button type="button" class="layui-btn" id="uploadimg">上传图片</button>-->
+<!--                            <div class="layui-upload-list">-->
+<!--                                <img style="width: 100px;height: 100px"class="layui-upload-img" id="demo1">-->
+<!--                                <p  id="demoText"></p>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+                <div class="layui-form-item">
+                    <label  class="layui-form-label"></label>
+                    <button id="layui-btn" class="layui-btn" lay-submit lay-filter="add">增加</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+<script>
+    (function(){
+        loadtype();
+        var  id=getQueryString("tableId")//tableId代表菜品ID
+        if(id != null){
+            $.ajax({
+                url:baseUrl.url+'food/food/'+id,
+                type:'GET',
+                async:true,
+                success:function(ret){
+                    $('#demo1').attr('src', ret.data.picture);
+                    $('#name').val(ret.data.name);
+                    $('#minPrice').val(ret.data.minPrice);
+                    $('#type').val(ret.data.typeId);
+                    $('#description').val(ret.data.description);
+                    loadstock(ret.data.stockdetail);
+                }
+            })
+        }else{
+            loadstock();
+        }
+        window.data = [];
+    })();
+    //加载库存
+    function loadstock(stockdetail){
+        $.ajax({
+            url:baseUrl.url+'food/stock',
+            data:{
+                stockdetail :stockdetail
+            },
+            type:'GET',
+            success:function(ret){
+                let stock = JSON.stringify(ret.data)
+                stock = stock.replaceAll("stockList","children").replaceAll("typename","name").replaceAll("id","value");
+                window.data = JSON.parse(stock);
+                xmSelect.render({
+                    el: '#stockdetail',
+                    language: 'zn',
+                    autoRow: true,
+                    filterable: true,
+                    data: window.data
+                })
+            }
+        })
+    }
+
+
+    layui.use('form', function(){
+        var form = layui.form;
+        //监听提交
+        form.on('submit(add)', function(data){
+            // layer.msg(JSON.stringify(data.field));
+            $.ajax({
+                url:baseUrl.url+'food/food',
+                type:'POST',
+                data:data.field,
+                success:function(ret){
+                    if(ret.success){
+                        layer.msg('添加成功!', {
+                            icon: 1,
+                            time: 1000
+                        });
+                        var index = parent.layer.getFrameIndex(window.name);
+                        //延时关闭当前frame
+                        setTimeout(function(){parent.layer.close(index);window.parent.location.reload();}, 1000);
+                    }else{
+                        layer.msg('添加失败!', {
+                            icon: 2,
+                            time: 1000
+                        });
+                        var index = parent.layer.getFrameIndex(window.name);
+                        //延时关闭当前frame
+                        setTimeout(function(){parent.layer.close(index);window.parent.location.reload();}, 1000);
+                    }
+                }
+            })
+            return false;
+        });
+    });
+
+
+
+    //获得网站连接
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r !== null)
+            return unescape(r[2]);
+        return null;
+    }
+
+    //加载下拉框
+    function loadtype(){
+        let types =JSON.parse(sessionStorage.getItem("foodtype"));
+        if (types==null){
+            $.ajax({
+                url:baseUrl.url+'food/type',
+                type:'GET',
+                success:function(ret){
+                    let types = ret.data
+                    sessionStorage.setItem("foodtype",JSON.stringify(types));
+                    let src = '<option value=""><option>';
+                    for (let i in types){
+                        let name = types[i].name
+                        let id = types[i].id
+                        src += '<option value="'+id+'">'+name+'<option>';
+                    }
+                    $("#type").append(src)
+                }
+            })
+        }else{
+            let src = '<option value=""><option>';
+            for (let i in types){
+                let name = types[i].name
+                let id = types[i].id
+                src += '<option value="'+id+'">'+name+'<option>';
+            }
+            $("#type").append(src)
+        }
+
+    }
+</script>
+</body>
+
+</html>

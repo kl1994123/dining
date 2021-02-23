@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.2</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8"/>
+    <link rel="stylesheet" th:href="@{../static/css/font.css}">
+    <link rel="stylesheet" th:href="@{../static/css/xadmin.css}">
+    <script th:src="@{../static/js/jquery.min.js}"></script>
+    <script th:src="@{../static/js/constance.js}"></script>
+    <script th:src="@{../static/layui/layui.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{../static/js/xadmin.js}"></script>
+
+</head>
+<body>
+    <div class="layui-fluid">
+        <div class="layui-row">
+<!--            <div class="layui-form-item">-->
+<!--                <label class="layui-form-label">菜品名称</label>-->
+<!--                <div class="layui-input-inline" style="display: flex">-->
+<!--                    <input type="text" value="花生" readonly autocomplete="off" class="layui-input" style="width:40%;text-align: center">-->
+<!--                    <input type="text" value="花生" readonly autocomplete="off" class="layui-input" style="width:40%;text-align: center">-->
+<!--                </div>-->
+<!--            </div>-->
+        </div>
+    </div>
+<script>
+
+    (function(){
+        var  ordernum=getQueryString("tableId")//tableId代表菜品ID
+        if(ordernum != null){
+            $.ajax({
+                url:baseUrl.url+'order/getOrderDetail/'+ordernum,
+                type:'GET',
+                success:function(ret){
+                    var data = ret.data;
+                    var src = "";
+                    for(var i in ret.data){
+                        src += '<div class="layui-form-item" >';
+                        src += '<label class="layui-form-label">菜品名称</label><div class="layui-input-inline" style="display: flex">';
+                        src += '<input type="text" value="'+data[i].name+'" readonly    autocomplete="off" class="layui-input" style="width:40%;text-align: center">';
+                        src += '<input type="text" value="'+data[i].status+'" readonly    autocomplete="off" class="layui-input" style="width:40%;text-align: center;margin-left: 20px">';
+                        src += '</div></div>';
+                    }
+                    $(".layui-row").append(src);
+                }
+            })
+        }
+    })();
+
+
+    //获得网站连接
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r !== null)
+            return unescape(r[2]);
+        return null;
+    }
+</script>
+</body>
+
+</html>

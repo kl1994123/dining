@@ -1,0 +1,99 @@
+body{
+    /*background-color: #f0f0f0;*/
+    background-size: 100% 130%;
+}
+
+
+* :not(dd) >a{
+    color: white!important;
+}
+/*.layui-header{*/
+/*background-color: #393D49;*/
+/*}*/
+.layui-logo{
+    height: 100%;
+}
+.layui-logo>img{
+    height: 100%
+}
+.layui-logo>a{
+    color: #e6e6e6;
+    font-size: 17px;
+    letter-spacing: 1px;
+    font-weight: 500
+}
+.content{
+    width: 90%;
+    min-height:500px;
+    margin: auto;
+
+
+}
+.content>iframe{
+    width: 100%;
+    min-height: 600px;
+    border: none;
+}
+.layui-tab-title{
+
+}
+.layui-tab{
+    width: 80%;
+    margin: auto;
+    margin-top: 10px;
+}
+.tips{
+    margin: 5px;
+    width: 15%;
+    float: left;
+    height:90px;
+    background-color: white;
+
+}
+
+.tips-item{
+    width: 40%;
+    margin-left: 5%;
+    float: left;
+    border: 1px #f0f0f0 solid;
+    cursor:Pointer;
+    background-color: white;
+
+}
+.tips :hover{
+    background-color: #f0f0f0;
+}
+.tips-title{
+    text-align: center;
+    font-size: 13px;
+    letter-spacing: 2px;
+}
+.tips-val{
+    text-align: center;
+    font-size: 20px;
+    color: red;
+}
+
+.oper-menu{
+    width: 10%;
+    height: 10%;
+}
+
+
+.title{
+    height: 60px;
+    width: 50%;
+    margin: auto;
+    line-height: 60px;
+    font-size:30px;
+    text-align: center;
+    letter-spacing: 3px;
+    cursor:pointer;
+}
+.oper-menu >span >a{
+    color: white!important;
+}
+
+.layui-tab-title >li{
+    color: black;
+}

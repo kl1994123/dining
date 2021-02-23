@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.2</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8"/>
+    <link rel="stylesheet" th:href="@{../../static/css/font.css}">
+    <link rel="stylesheet" th:href="@{../../static/css/xadmin.css}">
+    <script th:src="@{../../static/js/jquery.min.js}"></script>
+    <script th:src="@{../../static/js/constance.js}"></script>
+    <script th:src="@{../../static/layui/layui.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{../../static/js/xadmin.js}"></script>
+
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row">
+        <form class="layui-form">
+            <div class="layui-form-item">
+                <label for="unit" class="layui-form-label">单位</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="unit" name="repass" lay-verify="required"  autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-item">
+                    <label for="type" class="layui-form-label">分类</label>
+                    <div class="layui-input-block" style="width: 190px" >
+                        <select name="type" lay-verify="required" id="type" >
+                            <option value="">请选择</option>
+                            <option value="">1号桌</option>
+                            <option value="">2号桌</option>
+                            <option value="">3号桌</option>
+                            <option value="">4号桌</option>
+                            <option value="">5号桌</option>
+                            <option value="">6号桌</option>
+                            <option value="">7号桌</option>
+                            <option value="">8号桌</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    (function(){
+        let stockid = getQueryString("tableId");
+
+    })();
+
+    function loaddata(stockid){
+        $.ajax({
+            url:baseUrl.url+'stock/stock',
+            data:{
+                name : data.field.name,
+                tableId : tableId
+            },
+            success:function (data){
+                layer.alert("增加成功", {
+                        icon: 6
+                    },
+                    function() {
+                        // 获得frame索引
+                        var index = parent.layer.getFrameIndex(window.name);
+                        //关闭当前frame
+                        parent.layer.close(index);
+                    });
+            }
+        })
+    }
+
+    layui.use('form', function(){
+        var form = layui.form;
+        //监听提交
+        form.on('submit(add)', function(data){
+            layer.msg(JSON.stringify(data.field));
+            return false;
+        });
+    });
+
+    //获得网站连接
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r !== null)
+            return unescape(r[2]);
+        return null;
+    }
+</script>
+</body>
+
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>点餐</title>
+    <title>menu</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <link rel="stylesheet" type="text/css" th:href="@{../static/css/goods.css}">
+</head>
+<body>
+<!--<div class="nav">-->
+<!--    <div class="back-icon"></div>-->
+<!--</div>-->
+<!-- 头部结束 -->
+
+<!-- tab开始 -->
+<!-- <div class="tab-bar"></div>  -->
+<!-- tab结束 -->
+
+<!-- 点菜内容开始 -->
+<div class="menu-inner">
+    <!-- 左侧tab -->
+    <div class="left-bar">
+        <div class="left-bar-inner"></div>
+    </div>
+    <!-- 右侧商品 -->
+    <div class="right-content" id="zzz">
+        <p class="right-title">商品导航</p>
+        <div class="right-list">
+            <div class="right-list-inner"></div>
+        </div>
+    </div>
+
+    <!-- 购物车 -->
+    <div class="shop-bar"></div>
+
+    <!-- 遮罩 -->
+    <div class="mask hide"></div>
+    <div class="mask2 hide"></div>
+</div>
+
+</body>
+<script th:src="@{../static/js/jquery.min.js}"></script>
+<script th:src="@{../static/js/goods.js}"></script>
+<script th:src="@{../static/js/constance.js}"></script>
+
+</html>

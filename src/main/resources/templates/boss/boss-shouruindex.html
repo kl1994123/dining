@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" lang="en" xmlns:th="https://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>layout 后台大布局 - Layui</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" th:href="@{../../static/layui/css/layui.css}">
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script th:src="@{../../static/layui/layui.js}" charset="utf-8"></script>
+</head>
+<body class="layui-layout-body">
+
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="margin-top: 15%;">
+            <div class="layui-btn-container" style="margin-left: 11%;width:70%;">
+                <div type="button" class="layui-btn" style="width: 230px;height: 190px;margin-left: 50px;font-size: 20px;background-color: #009688;margin-top: 20px;" onclick="gotoinfo(1)"><div style="height:30%;width: 100%;border-bottom: 1px solid white;padding-top: 15%;">当日收入：<span>1000</span></div><div style="height: 30%;width: 100%;padding-top: 15%;">较上日收入：<span>2000</span></div></div>
+                <div type="button" class="layui-btn" style="width: 230px;height: 190px;margin-left: 50px;font-size: 20px;background-color: #009688;margin-top: 20px;" onclick="gotoinfo(2)"><div style="height:30%;width: 100%;border-bottom: 1px solid white;padding-top: 15%;">当月收入：<span>1000</span></div><div style="height: 30%;width: 100%;padding-top: 15%;">较上月收入：<span>2000</span></div></div>
+                <div type="button" class="layui-btn" style="width: 230px;height: 190px;margin-left: 50px;font-size: 20px;background-color: #009688;margin-top: 20px;" onclick="gotoinfo(3)"><div style="height:30%;width: 100%;border-bottom: 1px solid white;padding-top: 15%;">当年收入：<span>1000</span></div><div style="height: 30%;width: 100%;padding-top: 15%;">较上年收入：<span>2000</span></div></div>
+                <div type="button" class="layui-btn" style="width: 230px;height: 190px;margin-left: 50px;font-size: 20px;background-color: #009688;margin-top: 20px;padding-top: 60px;" onclick="gotoinfo(4)">收入结构</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    //JavaScript代码区域
+    layui.use('element', function(){
+        var element = layui.element;
+
+    });
+
+    function gotoinfo(id) {
+        // alert(id==1);
+        if(id==1){
+            // parent.gotoTab('日报','/user/boss/boss-shouruindex-r')
+        }else if(id==2){
+            parent.gotoTab('周报','/user/boss/boss-shouruindex-w')
+        }else if(id==3){
+            parent.gotoTab('月报','/user/boss/boss-shouruindex-m')
+        }else if(id==4){
+            parent.gotoTab('收入结构','/user/boss/boss-shouruindex-jg')
+        }
+    }
+</script>
+</body>
+</html>

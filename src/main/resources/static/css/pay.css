@@ -1,0 +1,117 @@
+body {
+    background: #F5F5F5
+}
+
+.header {
+	position: absolute;
+	top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 70px;
+    border-bottom: 1px #ccc solid;
+    line-height: 80px;
+    text-align: left;
+    display: flex;
+    background-color: #fff;
+}
+
+.header .title {
+    font-size: 25px;
+    margin-left: 10px;
+}
+
+.order-content {
+    overflow: scroll;
+    position: absolute;
+	top: 70px;
+    left: 0;
+    right: 0;
+    width: 100%;
+}
+
+.content {
+    width: 100%;
+    background: #fff;
+    margin-top: 10px;
+    display: flex;
+}
+
+.img {
+    width: 80px;
+    height: 80px;
+    padding: 10px 0 10px 10px;
+}
+
+.detail {
+    width: 60%;
+    padding: 10px 0 0 10px;
+}
+
+.proname {
+    font-size: 20px;
+    overflow: hidden;
+    /*对超出容器的部分强制截取，高度不确定则换行*/
+    text-overflow: ellipsis;
+    /*显示省略符号来代表被修剪的文本。*/
+    white-space: nowrap;
+    /*禁止换行*/
+}
+
+.description {
+    color: #ccc;
+    font-size: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 5px;
+}
+
+.price {
+    color: #ccc;
+    font-size: 15px;
+    margin-top: 5px;
+}
+
+.numandtotal .num {
+    float: left;
+    color: #ccc;
+    font-size: 15px;
+}
+
+.numandtotal .total {
+    float: right;
+    color: orange;
+    font-size: 25px;
+}
+
+.shopbar {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 70px;
+    background: #fff;
+    display: flex;
+}
+
+.totalPrice {
+    height: 70px;
+    width: 70%;
+}
+
+.definedpay {
+    height: 70px;
+    width: 29%;
+    background: orange;
+    color: #fff;
+    font-size: 25px;
+    line-height: 70px;
+    text-align: center;
+}
+
+.zongji {
+    color: orange;
+    font-size: 25px;
+    line-height: 70px;
+    text-align: center;
+}

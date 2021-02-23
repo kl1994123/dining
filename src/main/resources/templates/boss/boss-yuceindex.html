@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.2</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8"/>
+    <link rel="stylesheet" th:href="@{../../static/css/font.css}">
+    <link rel="stylesheet" th:href="@{../../static/css/xadmin.css}">
+    <script th:src="@{../../static/js/jquery.min.js}"></script>
+    <script th:src="@{../../static/js/constance.js}"></script>
+    <script th:src="@{../../static/layui/layui.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{../../static/js/xadmin.js}"></script>
+
+</head>
+
+<body>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                </div>
+                <div class=" "   style="width: 49%;float: left">
+                    <h2>每日采购</h2>
+                    <table class="layui-table layui-form">
+                        <thead>
+                        <tr>
+                            <th>物品</th>
+                            <th>数量</th>
+                            <th>单位</th>
+                        </tr>
+                        </thead>
+                        <tbody class="tablelist" style="margin:0 auto">
+                        <tr><td>五花肉</td><td>20</td><td>斤</td></tr>
+                        <tr><td>牛蹄筋</td><td>20</td><td>斤</td></tr>
+                        <tr><td>嫩豆腐</td><td>20</td><td>斤</td></tr>
+                        <tr><td>豌豆尖</td><td>20</td><td>斤</td></tr>
+                        <tr><td>空心菜</td><td>20</td><td>斤</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class=""   style="width: 49%;float: right">
+                    <h2>常规采购</h2>
+                    <table class="layui-table layui-form" title="最近3个月优化名单" >
+                        <thead>
+                        <tr>
+                            <th>物品</th>
+                            <th>数量</th>
+                            <th>单位</th>
+                        </tr>
+                        </thead>
+                        <tbody class="tablelist" style="margin:0 auto">
+                        <tr><td>酱油</td><td>10</td><td>瓶</td></tr>
+                        <tr><td>调和油</td><td>5</td><td>桶</td></tr>
+                        <tr><td>盐</td><td>20</td><td>袋</td></tr>
+                        <tr><td>大米</td><td>100</td><td>斤</td></tr>
+                        <tr><td>啤酒</td><td>200</td><td>瓶</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="layui-card-body">
+                    <div id="page"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    (function() {
+        // layui.form.render('select','myDiv');
+        layui.use('form', function () {
+            var form = layui.form;
+            form.render();
+        });
+
+
+    })();
+
+
+    layui.use('laypage', function(){
+        let c = getTableCount();
+        var laypage = layui.laypage;
+        //执行一个laypage实例
+        laypage.render({
+            elem: 'page',//注意，这里的 test1 是 ID，不用加 # 号
+            count: c, //数据总数，从服务端得到
+            jump: function(obj, first){
+                //首次不执行
+
+            }
+        });
+    });
+
+
+
+
+
+    /*删除*/
+    function user_del(obj, id) {
+        layer.confirm('确认要删除吗？',function (index) {
+            //发异步删除数据
+            $.ajax({
+                url:baseUrl.url+"user/user/"+id,
+                type:'DELETE',
+                success:function (ret){
+                    if(ret.success){
+                        layer.msg('已删除!', {
+                            icon: 1,
+                            time: 1000
+                        });
+                        setTimeout('window.location.reload()',1000);
+                    }
+                }
+            })
+        });
+    }
+
+    function delAll(argument) {
+        var data = tableCheck.getData();
+        layer.confirm('确认要删除吗？' + data,
+            function (index) {
+                //捉到所有被选中的，发异步进行删除
+                layer.msg('删除成功', {
+                    icon: 1
+                });
+                $(".layui-form-checked").not('.header').parents('tr').remove();
+            });
+    }
+</script>
+<style>
+    .imgs{
+        width: 50px;
+        height: 50px;
+    }
+</style>
+</html>

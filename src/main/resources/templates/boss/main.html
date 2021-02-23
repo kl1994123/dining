@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" lang="en" xmlns:th="https://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>书吧数字化智能管理平台</title>
+<!--    <link rel="stylesheet" href="/wl/layui/css/layui.css">-->
+    <link rel="stylesheet" th:href="@{../../static/css/parent.css}">
+
+    <link rel="stylesheet" th:href="@{../../static/layui/css/layui.css}">
+    <link rel="stylesheet" th:href="@{../../static/css/main.css}">
+    <script th:src="@{../../static/js/constance.js}"></script>
+    <script type="text/javascript" th:src="@{https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js}"></script>
+    <script th:src="@{../../static/layui/layui.js}" charset="utf-8"></script>
+
+</head>
+<body>
+    <!--头部-->
+    <div class="layui-header"  style="background: #009688">
+        <div class="title leader-item" style="background: #009688;color: #fff"  onclick="location.replace('/boss/main')">
+            书吧数字化智能管理平台
+        </div>
+
+        <ul class="layui-nav layui-layout-right" style="background: #009688">
+            <li class="layui-nav-item " id="welcome"></li>
+            <li class="layui-nav-item ">
+                <button type="button" class="layui-btn layui-btn-primary layui-btn-radius logout">注销</button>
+            </li>
+        </ul>
+    </div>
+
+    <!--内容-->
+    <div class="content">
+        <div class="layui-tab" lay-allowClose="true" lay-filter="history">
+            <ul class="layui-tab-title">
+            </ul>
+        </div>
+        <iframe src="/user/boss/boss-homepage" id="content_val">
+        </iframe>
+    </div>
+<script th:src="@{../../static/js/sys_function.js}" charset="utf-8"></script>
+
+    <script>
+
+        layui.use(['element','jquery','layer'],function(){
+            var element,$,layer
+            element = layui.element
+            $=layui.$
+            layer=layui.layer
+            addTab('首页','/user/boss/boss-homepage')
+            $(".logout").click(function () {
+                $.ajax({
+                    url:baseUrl.url+"user/logout",
+                    success:function (ret){
+                        if (ret.success){
+                            location.href = "/";
+                        }
+                    }
+                })
+            })
+
+
+
+        //tab点击
+        element.on('tab(history)', function(data){
+            var url=this.getAttribute("urlVal"); //当前Tab标题所在的原始DOM元素
+            var i= data.index; //得到当前Tab的所在下标
+            $(".layui-tab-title").find("li").eq(i).nextAll().remove();
+            goto(url)
+        });
+    });
+
+</script>
+</body>
+</html>

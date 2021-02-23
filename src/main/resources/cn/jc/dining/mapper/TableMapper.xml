@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.jc.dining.mapper.TableMapper">
+
+    <select id="getAllTable" resultType="cn.jc.dining.domain.Table">
+        select * from st_table
+    </select>
+
+    <select id="getAllTableByTime" resultType="cn.jc.dining.domain.Table">
+        select * from st_table
+        where createDate between #{start} and #{end}
+    </select>
+    <select id="getAllCount" resultType="java.lang.String">
+        select count(*) from st_table
+    </select>
+
+    <insert id="addNewTable" parameterType="cn.jc.dining.domain.Table">
+        insert into st_table
+        (tableNum ,personNum ,servicePerson ,createDate)
+        value
+        (#{tableNum} ,#{personNum} ,#{servicePerson} ,#{createDate})
+    </insert>
+
+    <update id="updateTable" parameterType="cn.jc.dining.domain.Table">
+        update st_table set
+        personNum=#{personNum},servicePerson = #{servicePerson},createDate = #{createDate}
+        where tableNum = #{tableNum}
+    </update>
+
+</mapper>

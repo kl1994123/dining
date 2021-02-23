@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" lang="en" xmlns:th="https://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>峨眉山餐厅数字化智能管理平台</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" th:href="@{../../static/layui/css/layui.css}">
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script th:src="@{../../static/layui/layui.js}" charset="utf-8"></script>
+</head>
+<body class="layui-layout-body">
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="margin-top: 10%;">
+            <div class="layui-btn-container" style="margin-left: 20%;width:60%;">
+                <button type="button" class="layui-btn" style="width: 230px;height: 190px;margin-left: 50px;font-size: 30px;background-color: #009688;margin-top: 20px;" onclick="gotoinfo(1)">菜品贡献</button>
+                <button type="button" class="layui-btn" style="width: 230px;height: 190px;margin-left: 50px;font-size: 30px;background-color: #009688;margin-top: 20px;" onclick="gotoinfo(2)">智能预测</button>
+                <button type="button" class="layui-btn" style="width: 230px;height: 190px;margin-left: 50px;font-size: 30px;background-color: #009688;margin-top: 20px;" onclick="gotoinfo(3)">菜品优化</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    //JavaScript代码区域
+    layui.use('element', function(){
+        var element = layui.element;
+
+    });
+
+    function gotoinfo(id) {
+        // alert(id==1);
+        if(id==1){
+            parent.gotoTab('菜品贡献','/user/boss/boss-caipinindex-gx')
+        }else if(id==2){
+            parent.gotoTab('智能预测','/user/boss/boss-caipinindex-yc')
+        }else if(id==3){
+            parent.gotoTab('菜品优化','/user/boss/boss-caipinindex-yh')
+        }
+    }
+</script>
+</body>
+</html>
